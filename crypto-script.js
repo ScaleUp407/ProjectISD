@@ -1,18 +1,3 @@
-<style>
-/* Basic styling for the crypto prices */
-#crypto-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-  gap: 20px;
-}
-
-.crypto-card {
-  border: 1px solid #ccc;
-  padding: 15px;
-  text-align: center;
-}
-</style>
-
 const cryptoContainer = document.getElementById('crypto-container');
 
 async function fetchCryptoPrices() {
