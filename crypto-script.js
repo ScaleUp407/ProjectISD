@@ -1,30 +1,48 @@
 const cryptoContainer = document.getElementById('crypto-container');
 
 async function fetchCryptoPrices() {
-  const apiKey = 'CG-urKFWuerWTDnC8bCxyjcdTHn'; // Replace with your CoinGecko API key
-  const cryptoSymbols = ['bitcoin', 'ethereum', 'litecoin']; // Add more if needed
+  const apiKey = 'CG-urKFWuerWTDnC8bCxyjcdTHn'; 
+  const specificSymbols = ['bitcoin', 'ethereum', 'litecoin'];
+  const topLimit = 10; // Number of top tokens to fetch
 
   try {
-    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoSymbols.join(',')}&vs_currencies=usd`);
-    const data = await response.json();
+    // Fetch specific coins
+    const specificResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${specificSymbols.join(',')}&vs_currencies=usd`);
+    const specificData = await specificResponse.json();
 
-    cryptoContainer.innerHTML = ''; // Clear previous prices
+    // Fetch top coins
+    const topResponse = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${topLimit}&page=1&sparkline=false&price_change_percentage=24h`);
+    const topData = await topResponse.json();
 
-    for (const symbol of cryptoSymbols) {
-      const price = data[symbol].usd;
+    cryptoContainer.innerHTML = '';
 
-      const cryptoCard = document.createElement('div');
-      cryptoCard.classList.add('crypto-card');
-      cryptoCard.innerHTML = `
-        <h2>${symbol.toUpperCase()}</h2>
-        <p>Price: $${price.toLocaleString()}</p>
-      `;
-      cryptoContainer.appendChild(cryptoCard);
+    // Display specific coins first
+    for (const symbol of specificSymbols) {
+      const price = specificData[symbol].usd;
+      createCryptoCard(symbol.toUpperCase(), price);
+    }
+
+    // Display top coins (excluding those already displayed)
+    for (const coin of topData) {
+      if (!specificSymbols.includes(coin.id)) { // Avoid duplicates
+        createCryptoCard(coin.symbol.toUpperCase(), coin.current_price, coin.price_change_percentage_24h.toFixed(2));
+      }
     }
   } catch (error) {
     console.error('Error fetching data:', error);
     cryptoContainer.innerHTML = '<p>Failed to fetch crypto prices.</p>';
   }
+}
+
+function createCryptoCard(symbol, price, changePercentage = null) {
+  const cryptoCard = document.createElement('div');
+  cryptoCard.classList.add('crypto-card');
+  cryptoCard.innerHTML = `
+    <h2>${symbol}</h2>
+    <p>Price: $${price.toLocaleString()}</p>
+    ${changePercentage ? `<p>24h Change: ${changePercentage}%</p>` : ''}
+  `;
+  cryptoContainer.appendChild(cryptoCard);
 }
 
 fetchCryptoPrices();
