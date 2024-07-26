@@ -1,5 +1,9 @@
+
 const cryptoContainer = document.getElementById('crypto-container');
 
+document.addEventListener('DOMContentLoaded', () => {
+    const cryptoScroller = document.getElementById("crypto-scroller");
+  
 async function fetchCryptoPrices() {
   const apiKey = 'CG-urKFWuerWTDnC8bCxyjcdTHn'; 
   const specificSymbols = ['bitcoin', 'ethereum', 'litecoin'];
