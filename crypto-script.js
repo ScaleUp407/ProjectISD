@@ -1,4 +1,5 @@
 const cryptoContainer = document.getElementById('crypto-container');
+const cryptoScroller = document.getElementById('crypto-scroller'); // Moved this to the top
 
 async function fetchCryptoPrices() {
   const apiKey = 'CG-urKFWuerWTDnC8bCxyjcdTHn'; 
@@ -14,7 +15,7 @@ async function fetchCryptoPrices() {
     const topResponse = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${topLimit}&page=1&sparkline=false&price_change_percentage=24h`);
     const topData = await topResponse.json();
 
-    cryptoContainer.innerHTML = ''; // Clear the container before adding new data
+    cryptoScroller.innerHTML = ''; // Clear the scroller before adding new data
 
     // Display specific coins first
     for (const symbol of specificSymbols) {
@@ -33,7 +34,7 @@ async function fetchCryptoPrices() {
     startScrollAnimation();
   } catch (error) {
     console.error('Error fetching data:', error);
-    cryptoContainer.innerHTML = '<p>Failed to fetch crypto prices.</p>';
+    cryptoScroller.innerHTML = '<p>Failed to fetch crypto prices.</p>';
   }
 }
 
@@ -45,15 +46,13 @@ function createCryptoCard(symbol, price, changePercentage = null) {
     <p>Price: $${price.toLocaleString()}</p>
     ${changePercentage ? `<p>24h Change: ${changePercentage}%</p>` : ''}
   `;
-  cryptoContainer.appendChild(cryptoCard);
+  cryptoScroller.appendChild(cryptoCard); // Append to the scroller instead of the container
 }
 
 function startScrollAnimation() {
-  const cryptoScroller = document.getElementById("crypto-scroller");
+  const cryptoCards = document.querySelectorAll('.crypto-card');
 
-  // Ensure the scroller element exists before trying to access its style
-  if (cryptoScroller) {
-    const cryptoCards = document.querySelectorAll('.crypto-card');
+  if (cryptoCards.length > 0) {
     const totalWidth = Array.from(cryptoCards).reduce((acc, card) => acc + card.offsetWidth + 5, 0);
 
     // Set the total width as a CSS variable for animation
@@ -65,7 +64,7 @@ function startScrollAnimation() {
       cryptoScroller.appendChild(clone);
     });
   } else {
-    console.error('Could not find #crypto-scroller element.');
+    console.error('No crypto cards found.');
   }
 }
 
