@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cryptoScroller = document.getElementById("crypto-scroller");
 
     // Fetching data from an external API
-    fetch('https://api.yourcryptosource.com/prices') // Replace with your actual API URL
+    fetch('CG-urKFWuerWTDnC8bCxyjcdTHn') // Replace with your actual API URL
         .then(response => response.json())
         .then(data => {
             data.forEach(crypto => {
