@@ -29,7 +29,7 @@ async function fetchCryptoPrices() {
       }
     }
 
-    // Start the scrolling animation
+    // Start the scrolling animation only after all cards are created
     startScrollAnimation();
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -49,17 +49,24 @@ function createCryptoCard(symbol, price, changePercentage = null) {
 }
 
 function startScrollAnimation() {
-  const cryptoCards = document.querySelectorAll('.crypto-card');
-  const totalWidth = Array.from(cryptoCards).reduce((acc, card) => acc + card.offsetWidth + 5, 0);
-
   const cryptoScroller = document.getElementById("crypto-scroller");
-  cryptoScroller.style.setProperty('--total-card-width', `${totalWidth}px`);
 
-  // Clone and append the cards for continuous scrolling
-  cryptoCards.forEach(card => {
-    const clone = card.cloneNode(true);
-    cryptoScroller.appendChild(clone);
-  });
+  // Ensure the scroller element exists before trying to access its style
+  if (cryptoScroller) {
+    const cryptoCards = document.querySelectorAll('.crypto-card');
+    const totalWidth = Array.from(cryptoCards).reduce((acc, card) => acc + card.offsetWidth + 5, 0);
+
+    // Set the total width as a CSS variable for animation
+    cryptoScroller.style.setProperty('--total-card-width', `${totalWidth}px`);
+
+    // Clone and append the cards for continuous scrolling
+    cryptoCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      cryptoScroller.appendChild(clone);
+    });
+  } else {
+    console.error('Could not find #crypto-scroller element.');
+  }
 }
 
 // Initial fetch
