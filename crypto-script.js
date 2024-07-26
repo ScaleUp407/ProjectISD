@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const cryptoScroller = document.getElementById("crypto-scroller");
-
+    
+async function fetchCryptoPrices() {
+  const apiKey = 'CG-urKFWuerWTDnC8bCxyjcdTHn'; 
+  const specificSymbols = ['bitcoin', 'ethereum', 'litecoin'];
+  const topLimit = 10;
+    
     // Fetching data from an external API
-    fetch('`https://api.coingecko.com/api/v3/simple/price?ids=${specificSymbols.join(',')}&vs_currencies=usd`);
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=${specificSymbols.join(',')}&vs_currencies=usd`);
     const specificData = await specificResponse.json();') // Replace with your actual API URL
         .then(response => response.json())
         .then(data => {
