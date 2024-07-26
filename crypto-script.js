@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cryptoScroller = document.getElementById("crypto-scroller");
 
     // Fetching data from an external API
-    fetch('CG-urKFWuerWTDnC8bCxyjcdTHn') // Replace with your actual API URL
+    fetch('`https://api.coingecko.com/api/v3/simple/price?ids=${specificSymbols.join(',')}&vs_currencies=usd`);
+    const specificData = await specificResponse.json();') // Replace with your actual API URL
         .then(response => response.json())
         .then(data => {
             data.forEach(crypto => {
